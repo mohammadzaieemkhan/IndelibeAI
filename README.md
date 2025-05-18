@@ -1,73 +1,78 @@
-# Welcome to your Lovable project
+Indelible AI
+Indelible AI is a personalized AI-powered study assistant designed to help students prepare for exams efficiently. It offers automated exam generation, grading, topic-based assessments, and mock test scheduling — all built with a modern and responsive UI.
 
-## Project info
+✨ Features
+Generate exams based on custom topics and syllabus
 
-**URL**: https://lovable.dev/projects/533b99b9-a04d-448f-9f91-afa1a50852bd
+Supports both MCQs and subjective questions
 
-## How can I edit this code?
+Automatic grading of answers
 
-There are several ways of editing your application.
+Schedule and customize mock tests
 
-**Use Lovable**
+Clean and responsive interface built with modern tools
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/533b99b9-a04d-448f-9f91-afa1a50852bd) and start prompting.
+🛠 How to Set Up and Edit the Code
+You can set up and edit this project locally using your preferred IDE.
+Make sure you have Node.js and npm installed.
+We recommend installing Node using nvm.
 
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
+Steps to Run the Project Locally:
+sh
+Copy
+Edit
+# Step 1: Clone the repository using the project's Git URL
 git clone <YOUR_GIT_URL>
 
-# Step 2: Navigate to the project directory.
+# Step 2: Navigate to the project directory
 cd <YOUR_PROJECT_NAME>
 
-# Step 3: Install the necessary dependencies.
-npm i
+# Step 3: Install all required dependencies
+npm install
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Step 4: Start the development server
 npm run dev
-```
+This will launch a development server with hot-reloading and live preview.
 
-**Edit a file directly in GitHub**
+✏️ Editing Files in GitHub
+You can also edit individual files directly on GitHub:
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Navigate to the file you want to modify.
 
-**Use GitHub Codespaces**
+Click the Edit (pencil) icon in the top right.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+Make your changes and commit.
 
-## What technologies are used for this project?
-
+⚙️ Technologies Used
 This project is built with:
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Vite
 
-## How can I deploy this project?
+React
 
-Simply open [Lovable](https://lovable.dev/projects/533b99b9-a04d-448f-9f91-afa1a50852bd) and click on Share -> Publish.
+TypeScript
 
-## Can I connect a custom domain to my Lovable project?
+Tailwind CSS
 
-Yes, you can!
+shadcn/ui
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+🚀 Deployment
+You can deploy this app using any static hosting platform that supports Vite-built applications, such as:
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+Vercel
+
+Netlify
+
+GitHub Pages
+
+After building the project with:
+
+sh
+Copy
+Edit
+npm run build
+Simply follow your host's instructions for deployment.
+
+📬 Feedback & Contributions
+We welcome your contributions, suggestions, and bug reports!
+Feel free to fork the repo, open issues, or submit pull requests.
