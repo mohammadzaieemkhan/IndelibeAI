@@ -2,7 +2,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
-const NVIDIA_API_KEY = Deno.env.get("NVIDIA_API_KEY");
+const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -13,7 +13,7 @@ const corsHeaders = {
 const DEFAULT_SYSTEM_PROMPT = "You are an AI assistant specialized in education, helping to create exam questions and evaluate answers based on educational content.";
 
 // Set timeout for API requests (in milliseconds)
-const API_TIMEOUT = 60000;
+const API_TIMEOUT = 30000;
 
 // Helper function to handle API request with timeout
 async function fetchWithTimeout(url, options, timeoutMs) {
@@ -270,17 +270,17 @@ serve(async (req) => {
     console.log("Making request to OpenAI API with prompt:", userPrompt);
     console.log("Using task:", task);
 
-    // Make the request to OpenAI API using NVIDIA's endpoint
+    // Make the request to OpenAI API
     const openaiResponse = await fetchWithTimeout(
-      "https://integrate.api.nvidia.com/v1/chat/completions", 
+      "https://api.openai.com/v1/chat/completions", 
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${NVIDIA_API_KEY}`,
+          "Authorization": `Bearer ${OPENAI_API_KEY}`,
         },
         body: JSON.stringify({
-          model: "nvidia/llama-3.3-nemotron-super-49b-v1",
+          model: "gpt-4o-mini",
           messages: [
             {
               role: "system",
@@ -291,7 +291,7 @@ serve(async (req) => {
               content: userPrompt
             }
           ],
-          temperature: 0.6,
+          temperature: 0.7,
           top_p: 0.95,
           max_tokens: 4096,
           frequency_penalty: 0,

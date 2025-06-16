@@ -3,7 +3,7 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { IExam } from "@/components/ExamTabs";
-import { useGeminiAI, useOpenAI } from "@/utils/apiService";
+import { useOpenAI } from "@/utils/apiService";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -197,7 +197,7 @@ const GenerateExamTab = ({
     return { isValid: true };
   };
 
-  // Update this handler to include question type configuration with OpenAI
+  // Update this handler to use only OpenAI
   const handleGenerateExam = async (values: FormValues) => {
     setIsGenerating(true);
     setGenerationError(null);

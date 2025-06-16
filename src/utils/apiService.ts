@@ -1,3 +1,4 @@
+
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/use-toast";
 
@@ -570,5 +571,5 @@ export const deleteExam = (examId: string): boolean => {
   }
 };
 
-// Keep the old function name for backward compatibility but use OpenAI
-export const useGeminiAI = useOpenAI;
+// Remove the old Gemini function completely
+// export const useGeminiAI = useOpenAI; - REMOVED
