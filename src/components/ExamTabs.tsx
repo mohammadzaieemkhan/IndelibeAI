@@ -1,10 +1,9 @@
-
 import { useState, useEffect } from "react";
 import { Bell, Calendar, BarChart, BookOpen, FileText } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { sendWhatsAppNotification, useGeminiAI } from "@/utils/apiService";
+import { sendWhatsAppNotification, useOpenAI } from "@/utils/apiService";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -220,121 +219,32 @@ const ExamTabs = () => {
     try {
       console.log("Starting AI evaluation for exam:", completedExam.name);
       
-      // Evaluate the exam using Gemini AI
-      const evaluationPrompt = `Evaluate the following exam responses:
-        
-      Exam: ${completedExam.name}
-      Topic(s): ${completedExam.topics.join(", ")}
-      Difficulty: ${completedExam.difficulty}
-      
-      Questions and Responses:
-      ${examData.questions.map((q, idx) => {
-        const questionNumber = idx + 1;
-        const questionType = q.type;
-        const userAnswer = examData.answers[`${questionNumber}`] || 'Not answered';
-        const correctAnswer = q.answer || 'N/A';
-        const weight = examData.questionWeights[idx] || 1;
-        
-        return `
-        Question ${questionNumber} (${questionType}, weight: ${weight}): ${q.question}
-        ${q.options ? `Options: ${q.options.join(" | ")}` : ''}
-        Correct Answer: ${correctAnswer}
-        User Answer: ${userAnswer}
-        `;
-      }).join("\n\n")}
-      
-      For each question, provide:
-      1. Whether the answer is correct (full points), partially correct (partial points), or incorrect (0 points)
-      2. A brief explanation/feedback
-      3. The points awarded out of the question weight
-      
-      Also provide:
-      - Total score (sum of awarded points)
-      - Total possible score (sum of question weights)
-      - Percentage score
-      - Performance breakdown by topic
-      
-      Use the following JSON format for your response:
-      {
-        "questionDetails": [
-          {
-            "question": "Question text",
-            "type": "question type",
-            "isCorrect": true/false/partial,
-            "feedback": "Brief feedback",
-            "marksObtained": number,
-            "totalMarks": number,
-            "userAnswer": "user's answer",
-            "correctAnswer": "correct answer"
-          }
-        ],
-        "totalScore": number,
-        "totalPossible": number,
-        "percentage": number,
-        "topicPerformance": {
-          "topic1": percentage,
-          "topic2": percentage
-        }
-      }`;
-      
-      console.log("Sending evaluation prompt to Gemini AI");
-      const evaluationResult = await useGeminiAI({
+      // Evaluate the exam using OpenAI
+      const evaluationResult = await useOpenAI({
         task: "evaluate_answer",
-        prompt: evaluationPrompt
+        examData: {
+          examId: examData.examId,
+          examName: examData.examName,
+          date: examData.date,
+          timeTaken: examData.timeTaken,
+          questions: examData.questions,
+          answers: examData.answers,
+          questionWeights: examData.questionWeights,
+          topics: completedExam.topics,
+          difficulty: completedExam.difficulty
+        }
       });
       
-      if (!evaluationResult.success || !evaluationResult.response) {
+      if (!evaluationResult.success || !evaluationResult.evaluationResult) {
         console.error("AI evaluation failed:", evaluationResult);
         throw new Error("Failed to evaluate exam responses");
       }
       
-      console.log("Received AI evaluation result:", evaluationResult.response);
+      console.log("Received AI evaluation result:", evaluationResult.evaluationResult);
       
-      // Parse the evaluation results
-      let parsedEvaluation;
-      try {
-        // Extract JSON from the response (may be wrapped in markdown code block)
-        const jsonMatch = evaluationResult.response.match(/```json\s*([\s\S]*?)\s*```/) || 
-                          evaluationResult.response.match(/{[\s\S]*}/);
-                          
-        const jsonStr = jsonMatch ? (jsonMatch[1] || jsonMatch[0]) : evaluationResult.response;
-        console.log("Extracted JSON string:", jsonStr);
-        parsedEvaluation = JSON.parse(jsonStr);
-        console.log("Parsed evaluation:", parsedEvaluation);
-      } catch (error) {
-        console.error("Failed to parse evaluation results:", error);
-        console.log("Raw evaluation response:", evaluationResult.response);
-        throw new Error("Failed to parse evaluation results");
-      }
-      
-      // Create the exam result object
-      const examResult = {
-        examId: examData.examId,
-        examName: examData.examName,
-        date: examData.date,
-        score: parsedEvaluation.totalScore,
-        totalMarks: parsedEvaluation.totalPossible,
-        percentage: parsedEvaluation.percentage,
-        timeTaken: examData.timeTaken,
-        questionStats: {
-          correct: parsedEvaluation.questionDetails.filter((q: any) => q.isCorrect === true).length,
-          incorrect: parsedEvaluation.questionDetails.filter((q: any) => q.isCorrect === false).length,
-          unattempted: parsedEvaluation.questionDetails.filter((q: any) => !q.userAnswer || q.userAnswer === 'Not answered').length,
-          total: parsedEvaluation.questionDetails.length
-        },
-        topicPerformance: parsedEvaluation.topicPerformance,
-        questionDetails: parsedEvaluation.questionDetails,
-        questions: examData.questions,
-        answers: examData.answers
-      };
+      const examResult = evaluationResult.evaluationResult;
       
       console.log("Created exam result object:", examResult);
-      
-      // Save the exam result
-      const savedResults = localStorage.getItem('examResults');
-      let examResults = savedResults ? JSON.parse(savedResults) : [];
-      examResults.push(examResult);
-      localStorage.setItem('examResults', JSON.stringify(examResults));
       
       // Move the exam from upcoming to previous
       console.log("Moving exam from upcoming to previous...");
@@ -354,7 +264,7 @@ const ExamTabs = () => {
       
       toast({
         title: "Exam Evaluated",
-        description: `You scored ${parsedEvaluation.percentage}% on ${completedExam.name}`
+        description: `You scored ${examResult.percentage}% on ${completedExam.name}`
       });
       
       // Switch to the performance tab to show results
