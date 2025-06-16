@@ -3,7 +3,7 @@ import { Bell, Calendar, BarChart, BookOpen, FileText } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { sendWhatsAppNotification, useOpenAI } from "@/utils/apiService";
+import { sendWhatsAppNotification, useGeminiAI } from "@/utils/apiService";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -191,7 +191,7 @@ const ExamTabs = () => {
     };
   }, [upcomingExams]);
   
-  // Process a completed exam
+  // Process a completed exam - NOW USING GEMINI AI
   const processCompletedExam = async (examData: IExamResult) => {
     console.log("Processing completed exam:", examData);
     // Find the exam in upcoming exams
@@ -219,8 +219,8 @@ const ExamTabs = () => {
     try {
       console.log("Starting AI evaluation for exam:", completedExam.name);
       
-      // Evaluate the exam using OpenAI
-      const evaluationResult = await useOpenAI({
+      // Evaluate the exam using Gemini AI
+      const evaluationResult = await useGeminiAI({
         task: "evaluate_answer",
         examData: {
           examId: examData.examId,

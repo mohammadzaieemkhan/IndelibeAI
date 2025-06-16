@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/use-toast";
 
@@ -75,15 +74,15 @@ export const sendWhatsAppNotification = async (
 };
 
 /**
- * Parse syllabus content using OpenAI
+ * Parse syllabus content using Gemini AI
  */
 export const parseSyllabusContent = async (
   syllabusContent: string
 ): Promise<{ success: boolean; topics?: string[]; error?: string; markdown?: string }> => {
   try {
-    console.log("Parsing syllabus content with OpenAI");
+    console.log("Parsing syllabus content with Gemini AI");
     
-    const { data, error } = await supabase.functions.invoke('openai-ai', {
+    const { data, error } = await supabase.functions.invoke('gemini-ai', {
       body: {
         task: "parse_syllabus",
         syllabusContent
@@ -91,7 +90,7 @@ export const parseSyllabusContent = async (
     });
 
     if (error) {
-      console.error("Error parsing syllabus with OpenAI:", error);
+      console.error("Error parsing syllabus with Gemini AI:", error);
       return { success: false, error: error.message };
     }
     
@@ -132,9 +131,9 @@ ${data.response}
 };
 
 /**
- * Use OpenAI for various tasks including exam evaluation
+ * Use Gemini AI for various tasks including exam evaluation
  */
-export const useOpenAI = async (
+export const useGeminiAI = async (
   params: {
     prompt?: string;
     task: "generate_questions" | "evaluate_answer" | "performance_insights" | "parse_syllabus";
@@ -155,7 +154,7 @@ export const useOpenAI = async (
   }
 ): Promise<{ success: boolean; response?: string; error?: string; evaluationResult?: any }> => {
   try {
-    console.log("Calling OpenAI with params:", params);
+    console.log("Calling Gemini AI with params:", params);
     
     // Ensure all required parameters are provided
     if (!params.task) {
@@ -223,7 +222,7 @@ For True/False questions, clearly state if the answer is True or False at the en
     
     // Enhancement for exam evaluation - completely revised for robust answer handling
     if (params.task === "evaluate_answer" && params.examData) {
-      console.log("Evaluating exam submission with OpenAI");
+      console.log("Evaluating exam submission with Gemini AI");
       
       // Thorough debugging of the exam data, especially the answers
       console.log("Exam data structure:", JSON.stringify(params.examData, null, 2));
@@ -274,13 +273,13 @@ For True/False questions, clearly state if the answer is True or False at the en
     }
     
     // Make the API call with enhanced logging
-    console.log("Making API call to openai-ai with task:", params.task);
-    const { data, error } = await supabase.functions.invoke('openai-ai', {
+    console.log("Making API call to gemini-ai with task:", params.task);
+    const { data, error } = await supabase.functions.invoke('gemini-ai', {
       body: params
     });
 
     if (error) {
-      console.error("Error using OpenAI:", error);
+      console.error("Error using Gemini AI:", error);
       toast({
         title: "AI Generation Error",
         description: "Failed to generate content with AI",
@@ -289,7 +288,7 @@ For True/False questions, clearly state if the answer is True or False at the en
       return { success: false, error: error.message };
     }
     
-    console.log("OpenAI response:", data);
+    console.log("Gemini AI response:", data);
     
     if (!data || !data.response) {
       toast({
@@ -308,7 +307,7 @@ For True/False questions, clearly state if the answer is True or False at the en
       // Process evaluation response and calculate results with multiple fallbacks
       try {
         console.log("Processing evaluation response");
-        // Try to parse the JSON response from OpenAI with multiple approaches for robustness
+        // Try to parse the JSON response from Gemini AI with multiple approaches for robustness
         let evaluationData;
         const responseText = data.response;
         
@@ -486,7 +485,7 @@ For True/False questions, clearly state if the answer is True or False at the en
     
     return { success: true, response: data.response };
   } catch (error) {
-    console.error("Error invoking openai-ai function:", error);
+    console.error("Error invoking gemini-ai function:", error);
     toast({
       title: "AI Generation Error",
       description: "An unexpected error occurred",
@@ -570,6 +569,3 @@ export const deleteExam = (examId: string): boolean => {
     return false;
   }
 };
-
-// Remove the old Gemini function completely
-// export const useGeminiAI = useOpenAI; - REMOVED
