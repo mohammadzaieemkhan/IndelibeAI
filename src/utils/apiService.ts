@@ -74,15 +74,15 @@ export const sendWhatsAppNotification = async (
 };
 
 /**
- * Parse syllabus content using Gemini AI
+ * Parse syllabus content using OpenAI
  */
 export const parseSyllabusContent = async (
   syllabusContent: string
 ): Promise<{ success: boolean; topics?: string[]; error?: string; markdown?: string }> => {
   try {
-    console.log("Parsing syllabus content with Gemini AI");
+    console.log("Parsing syllabus content with OpenAI");
     
-    const { data, error } = await supabase.functions.invoke('gemini-ai', {
+    const { data, error } = await supabase.functions.invoke('openai-ai', {
       body: {
         task: "parse_syllabus",
         syllabusContent
@@ -90,7 +90,7 @@ export const parseSyllabusContent = async (
     });
 
     if (error) {
-      console.error("Error parsing syllabus with Gemini AI:", error);
+      console.error("Error parsing syllabus with OpenAI:", error);
       return { success: false, error: error.message };
     }
     
@@ -131,9 +131,9 @@ ${data.response}
 };
 
 /**
- * Use Gemini AI for various tasks including exam evaluation
+ * Use OpenAI for various tasks including exam evaluation
  */
-export const useGeminiAI = async (
+export const useOpenAI = async (
   params: {
     prompt?: string;
     task: "generate_questions" | "evaluate_answer" | "performance_insights" | "parse_syllabus";
@@ -154,7 +154,7 @@ export const useGeminiAI = async (
   }
 ): Promise<{ success: boolean; response?: string; error?: string; evaluationResult?: any }> => {
   try {
-    console.log("Calling Gemini AI with params:", params);
+    console.log("Calling OpenAI with params:", params);
     
     // Ensure all required parameters are provided
     if (!params.task) {
@@ -183,32 +183,8 @@ export const useGeminiAI = async (
         params.questionTypes = [params.questionTypes];
       }
       
-      // Enhanced prompt for better question generation by sections
-      if (params.sections && params.sections.length > 0) {
-        // Create a structured prompt for organized sections
-        let sectionsPrompt = "Create the following organized exam sections with clearly labeled and numbered questions:\n\n";
-        
-        params.sections.forEach((section, index) => {
-          sectionsPrompt += `SECTION ${index + 1}: ${section.title || 'Untitled Section'}\n`;
-          sectionsPrompt += `- Number of questions: ${section.numberOfQuestions || 5}\n`;
-          sectionsPrompt += `- Question types: ${section.questionTypes.join(", ")}\n`;
-          sectionsPrompt += `- Topics: ${section.topics.join(", ")}\n`;
-          sectionsPrompt += `- Difficulty: ${section.difficulty || "medium"}\n\n`;
-        });
-        
-        sectionsPrompt += "\nIMPORTANT FORMATTING INSTRUCTIONS:\n";
-        sectionsPrompt += "- Clearly label each section with its name\n";
-        sectionsPrompt += "- Number questions sequentially within each section\n";
-        sectionsPrompt += "- For multiple choice questions, format each option on a SEPARATE LINE with clear labels (A, B, C, D)\n";
-        sectionsPrompt += "- Clearly indicate the correct answer for each question\n";
-        sectionsPrompt += "- ALL questions MUST be directly related to the specified topics\n";
-        
-        // Update or create the prompt
-        const basePrompt = params.prompt || "";
-        params.prompt = basePrompt + "\n\n" + sectionsPrompt;
-      }
-      // Enhanced prompt for better question type distribution with specific counts
-      else if (params.questionTypes && params.questionTypes.length > 0) {
+      // Enhanced prompt for better question generation with specific order for mixed distribution
+      if (params.questionTypes && params.questionTypes.length > 0) {
         // Calculate how many questions of each type
         const typeCount = params.questionTypes.length;
         const totalQuestions = params.numberOfQuestions || 10;
@@ -216,9 +192,16 @@ export const useGeminiAI = async (
         // Create or enhance the prompt with specific distribution instructions
         const basePrompt = params.prompt || "";
         
-        // Add specific instruction to label each question with its type
+        // Add specific instruction to label each question with its type and enforce order for mixed
         const distributionPrompt = `
 Please create a balanced set of questions according to the specified distribution.
+
+CRITICAL ORDERING FOR MIXED DISTRIBUTION:
+When generating mixed question types, ALWAYS follow this exact order:
+1. FIRST: All Multiple Choice Questions (MCQ)
+2. SECOND: All Short Answer Questions
+3. THIRD: All Essay Questions
+4. FOURTH: All True/False Questions
 
 It's CRITICAL that you label each question with its type at the beginning of the question:
 - For MCQs: "MCQ: [question]"
@@ -239,7 +222,7 @@ For True/False questions, clearly state if the answer is True or False at the en
     
     // Enhancement for exam evaluation - completely revised for robust answer handling
     if (params.task === "evaluate_answer" && params.examData) {
-      console.log("Evaluating exam submission with Gemini AI");
+      console.log("Evaluating exam submission with OpenAI");
       
       // Thorough debugging of the exam data, especially the answers
       console.log("Exam data structure:", JSON.stringify(params.examData, null, 2));
@@ -290,13 +273,13 @@ For True/False questions, clearly state if the answer is True or False at the en
     }
     
     // Make the API call with enhanced logging
-    console.log("Making API call to gemini-ai with task:", params.task);
-    const { data, error } = await supabase.functions.invoke('gemini-ai', {
+    console.log("Making API call to openai-ai with task:", params.task);
+    const { data, error } = await supabase.functions.invoke('openai-ai', {
       body: params
     });
 
     if (error) {
-      console.error("Error using Gemini AI:", error);
+      console.error("Error using OpenAI:", error);
       toast({
         title: "AI Generation Error",
         description: "Failed to generate content with AI",
@@ -305,7 +288,7 @@ For True/False questions, clearly state if the answer is True or False at the en
       return { success: false, error: error.message };
     }
     
-    console.log("Gemini AI response:", data);
+    console.log("OpenAI response:", data);
     
     if (!data || !data.response) {
       toast({
@@ -324,7 +307,7 @@ For True/False questions, clearly state if the answer is True or False at the en
       // Process evaluation response and calculate results with multiple fallbacks
       try {
         console.log("Processing evaluation response");
-        // Try to parse the JSON response from Gemini with multiple approaches for robustness
+        // Try to parse the JSON response from OpenAI with multiple approaches for robustness
         let evaluationData;
         const responseText = data.response;
         
@@ -502,7 +485,7 @@ For True/False questions, clearly state if the answer is True or False at the en
     
     return { success: true, response: data.response };
   } catch (error) {
-    console.error("Error invoking gemini-ai function:", error);
+    console.error("Error invoking openai-ai function:", error);
     toast({
       title: "AI Generation Error",
       description: "An unexpected error occurred",
@@ -586,3 +569,6 @@ export const deleteExam = (examId: string): boolean => {
     return false;
   }
 };
+
+// Keep the old function name for backward compatibility but use OpenAI
+export const useGeminiAI = useOpenAI;

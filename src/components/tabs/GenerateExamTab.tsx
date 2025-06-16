@@ -3,7 +3,7 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { IExam } from "@/components/ExamTabs";
-import { useGeminiAI } from "@/utils/apiService";
+import { useGeminiAI, useOpenAI } from "@/utils/apiService";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -197,7 +197,7 @@ const GenerateExamTab = ({
     return { isValid: true };
   };
 
-  // Update this handler to include question type configuration
+  // Update this handler to include question type configuration with OpenAI
   const handleGenerateExam = async (values: FormValues) => {
     setIsGenerating(true);
     setGenerationError(null);
@@ -217,7 +217,7 @@ const GenerateExamTab = ({
       return;
     }
 
-    // Add question type configuration
+    // Add question type configuration with specific ordering for mixed
     let questionTypeConfig: Record<string, number> = {};
     let questionTypesArray: string[] = [];
     
@@ -234,13 +234,14 @@ const GenerateExamTab = ({
       questionTypesArray = ["trueFalse"];
       questionTypeConfig = { trueFalse: parseInt(values.numberOfQuestions) };
     } else if (values.questionTypes === "mixed") {
-      // For mixed, we'll distribute evenly
+      // For mixed, ensure specific order: MCQ → Short Answer → Essay → True/False
       questionTypesArray = ["mcq", "shortAnswer", "essay", "trueFalse"];
       
       const totalQuestions = parseInt(values.numberOfQuestions);
       const baseCount = Math.floor(totalQuestions / 4);
       const remainder = totalQuestions % 4;
       
+      // Distribute questions ensuring the order is maintained
       questionTypeConfig = {
         mcq: baseCount + (remainder > 0 ? 1 : 0),
         shortAnswer: baseCount + (remainder > 1 ? 1 : 0),
@@ -279,7 +280,7 @@ const GenerateExamTab = ({
     console.log("Question types array:", questionTypesArray);
     console.log("Question type config:", questionTypeConfig);
     
-    // Construct the prompt for the AI
+    // Construct the prompt for the AI with specific ordering instructions
     let prompt = `Generate an exam with the following specifications:
     
     Name: ${values.examName}
@@ -287,6 +288,15 @@ const GenerateExamTab = ({
     Number of Questions: ${values.numberOfQuestions}
     Difficulty: ${values.difficulty}
     Question Types: ${questionTypesArray.join(", ")}
+    
+    IMPORTANT ORDERING REQUIREMENT:
+    When generating mixed question types, ALWAYS follow this exact sequence:
+    1. FIRST: All Multiple Choice Questions (MCQ)
+    2. SECOND: All Short Answer Questions  
+    3. THIRD: All Essay Questions
+    4. FOURTH: All True/False Questions
+    
+    Do NOT intermix question types. Complete all questions of one type before moving to the next type.
     `;
 
     // Add question type configuration to the prompt
@@ -325,13 +335,13 @@ const GenerateExamTab = ({
     Please provide the correct answers at the end of the exam. For MCQs, clearly indicate the letter of the correct answer (e.g., "Answer: B").`;
 
     try {
-      console.log("Calling Gemini AI with params:", {
+      console.log("Calling OpenAI with params:", {
         task: "generate_questions",
         prompt: prompt,
         questionTypes: questionTypesArray,
       });
       
-      const response = await useGeminiAI({
+      const response = await useOpenAI({
         task: "generate_questions",
         prompt: prompt,
         questionTypes: questionTypesArray,
