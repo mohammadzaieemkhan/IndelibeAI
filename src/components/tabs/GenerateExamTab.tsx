@@ -3,7 +3,7 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { IExam } from "@/components/ExamTabs";
-import { useOpenAI } from "@/utils/apiService";
+import { useGeminiAI } from "@/utils/apiService";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -197,7 +197,7 @@ const GenerateExamTab = ({
     return { isValid: true };
   };
 
-  // Update this handler to use only OpenAI
+  // Update this handler to use useGeminiAI instead of useOpenAI
   const handleGenerateExam = async (values: FormValues) => {
     setIsGenerating(true);
     setGenerationError(null);
@@ -335,13 +335,13 @@ const GenerateExamTab = ({
     Please provide the correct answers at the end of the exam. For MCQs, clearly indicate the letter of the correct answer (e.g., "Answer: B").`;
 
     try {
-      console.log("Calling OpenAI with params:", {
+      console.log("Calling Gemini AI with params:", {
         task: "generate_questions",
         prompt: prompt,
         questionTypes: questionTypesArray,
       });
       
-      const response = await useOpenAI({
+      const response = await useGeminiAI({
         task: "generate_questions",
         prompt: prompt,
         questionTypes: questionTypesArray,
