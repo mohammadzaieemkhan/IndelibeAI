@@ -1,0 +1,187 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradients -->
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="70%" fx="50%" fy="30%">
+      <stop offset="0%" stop-color="#18182b"/>
+      <stop offset="100%" stop-color="#0a0a12"/>
+    </radialGradient>
+
+    <!-- Animated Core Glow -->
+    <radialGradient id="coreGlow" cx="50%" cy="40%" r="45%">
+      <stop offset="0%" stop-color="#6366f1" stop-opacity="0.35"/>
+      <stop offset="50%" stop-color="#8b5cf6" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#0a0a12" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Linear Gradient for Accent Lines -->
+    <linearGradient id="neonGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="50%" stop-color="#818cf8"/>
+      <stop offset="100%" stop-color="#c084fc"/>
+    </linearGradient>
+
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="40%" stop-color="#e0e7ff"/>
+      <stop offset="100%" stop-color="#a5b4fc"/>
+    </linearGradient>
+
+    <linearGradient id="badgeBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.3"/>
+    </linearGradient>
+
+    <!-- Drop Shadow Filter -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="12" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <filter id="subtleGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <style>
+    @keyframes pulse {
+      0%, 100% { opacity: 0.35; transform: scale(1); }
+      50% { opacity: 0.65; transform: scale(1.04); }
+    }
+    @keyframes floatParticle {
+      0%, 100% { transform: translateY(0px) translateX(0px); opacity: 0.4; }
+      50% { transform: translateY(-12px) translateX(8px); opacity: 0.85; }
+    }
+    @keyframes dashLine {
+      0% { stroke-dashoffset: 1000; }
+      100% { stroke-dashoffset: 0; }
+    }
+    @keyframes beacon {
+      0% { r: 4px; opacity: 1; }
+      100% { r: 16px; opacity: 0; }
+    }
+    .pulsing-glow {
+      animation: pulse 6s ease-in-out infinite;
+      transform-origin: center;
+    }
+    .p1 { animation: floatParticle 5s ease-in-out infinite; }
+    .p2 { animation: floatParticle 7s ease-in-out infinite 1s; }
+    .p3 { animation: floatParticle 6s ease-in-out infinite 2s; }
+    .pulse-ring {
+      animation: beacon 2.4s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+    }
+    .grid-pattern {
+      opacity: 0.08;
+    }
+    .title-text {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+    .sub-text {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+    }
+    .badge-text {
+      font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, monospace;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+  </style>
+
+  <!-- Background Canvas -->
+  <rect width="1200" height="360" rx="16" fill="url(#bgGrad)"/>
+
+  <!-- Technical Grid Background -->
+  <g class="grid-pattern" stroke="#a5b4fc" stroke-width="1">
+    <line x1="0" y1="60" x2="1200" y2="60" />
+    <line x1="0" y1="120" x2="1200" y2="120" />
+    <line x1="0" y1="180" x2="1200" y2="180" />
+    <line x1="0" y1="240" x2="1200" y2="240" />
+    <line x1="0" y1="300" x2="1200" y2="300" />
+    <line x1="120" y1="0" x2="120" y2="360" />
+    <line x1="240" y1="0" x2="240" y2="360" />
+    <line x1="360" y1="0" x2="360" y2="360" />
+    <line x1="480" y1="0" x2="480" y2="360" />
+    <line x1="600" y1="0" x2="600" y2="360" />
+    <line x1="720" y1="0" x2="720" y2="360" />
+    <line x1="840" y1="0" x2="840" y2="360" />
+    <line x1="960" y1="0" x2="960" y2="360" />
+    <line x1="1080" y1="0" x2="1080" y2="360" />
+  </g>
+
+  <!-- Ambient Light Orbs -->
+  <circle cx="600" cy="160" r="260" fill="url(#coreGlow)" class="pulsing-glow" />
+  <circle cx="200" cy="100" r="140" fill="#38bdf8" opacity="0.08" class="pulsing-glow" />
+  <circle cx="1020" cy="240" r="160" fill="#c084fc" opacity="0.08" class="pulsing-glow" />
+
+  <!-- Animated Floating Particle Nodes -->
+  <circle cx="180" cy="80" r="3" fill="#38bdf8" class="p1" filter="url(#subtleGlow)"/>
+  <circle cx="240" cy="260" r="2.5" fill="#818cf8" class="p2"/>
+  <circle cx="1040" cy="90" r="3.5" fill="#c084fc" class="p3" filter="url(#subtleGlow)"/>
+  <circle cx="960" cy="270" r="2" fill="#38bdf8" class="p1"/>
+  <circle cx="600" cy="40" r="2.5" fill="#a5b4fc" class="p2"/>
+
+  <!-- Top Pill Badge -->
+  <g transform="translate(600, 64)">
+    <rect x="-185" y="-16" width="370" height="32" rx="16" fill="#131325" stroke="url(#badgeBorder)" stroke-width="1.2"/>
+    <!-- Animated Status Beacon -->
+    <circle cx="-152" cy="0" r="4" fill="#10b981"/>
+    <circle cx="-152" cy="0" r="4" fill="none" stroke="#10b981" stroke-width="1.5" class="pulse-ring"/>
+    <text x="-136" y="4" fill="#a5b4fc" class="badge-text">
+      NEXT-GEN AI STUDY &amp; EXAM PLATFORM
+    </text>
+  </g>
+
+  <!-- Main Hero Brand Title -->
+  <g transform="translate(600, 162)">
+    <!-- Decorative Icon / Glyph -->
+    <path d="M-220,-24 L-200,-54 L-180,-24 Z" fill="none" stroke="url(#neonGrad)" stroke-width="3" filter="url(#subtleGlow)"/>
+    <circle cx="-200" cy="-34" r="4" fill="#38bdf8"/>
+    
+    <text x="0" y="0" text-anchor="middle" fill="url(#textGrad)" font-size="56" class="title-text" filter="url(#glow)">
+      INDELIBLE AI
+    </text>
+  </g>
+
+  <!-- Sleek Accent Underline Bar -->
+  <rect x="420" y="184" width="360" height="3" rx="1.5" fill="url(#neonGrad)" />
+
+  <!-- Tagline / Subtitle -->
+  <text x="600" y="224" text-anchor="middle" fill="#94a3b8" font-size="17" class="sub-text">
+    Automated Syllabus-to-Exam Generation • Multimodal OCR • Dual AI (Gemini + OpenAI)
+  </text>
+  <text x="600" y="250" text-anchor="middle" fill="#64748b" font-size="14" class="sub-text">
+    Intelligent Auto-Grading • WhatsApp Exam Alerts • Deep Recharts Performance Analytics
+  </text>
+
+  <!-- Feature Quick Pills Footer -->
+  <g transform="translate(600, 305)">
+    <!-- Pill 1 -->
+    <g transform="translate(-370, 0)">
+      <rect x="0" y="-14" width="165" height="28" rx="14" fill="#18182f" stroke="#312e81" stroke-width="1"/>
+      <text x="82" y="4" text-anchor="middle" fill="#cbd5e1" font-size="12" class="badge-text">⚡ Gemini 1.5 Flash</text>
+    </g>
+    <!-- Pill 2 -->
+    <g transform="translate(-185, 0)">
+      <rect x="0" y="-14" width="165" height="28" rx="14" fill="#18182f" stroke="#312e81" stroke-width="1"/>
+      <text x="82" y="4" text-anchor="middle" fill="#cbd5e1" font-size="12" class="badge-text">🤖 OpenAI GPT-4o</text>
+    </g>
+    <!-- Pill 3 -->
+    <g transform="translate(0, 0)">
+      <rect x="0" y="-14" width="180" height="28" rx="14" fill="#18182f" stroke="#312e81" stroke-width="1"/>
+      <text x="90" y="4" text-anchor="middle" fill="#cbd5e1" font-size="12" class="badge-text">📄 Handwritten OCR</text>
+    </g>
+    <!-- Pill 4 -->
+    <g transform="translate(200, 0)">
+      <rect x="0" y="-14" width="170" height="28" rx="14" fill="#18182f" stroke="#312e81" stroke-width="1"/>
+      <text x="85" y="4" text-anchor="middle" fill="#cbd5e1" font-size="12" class="badge-text">📲 WhatsApp Alerts</text>
+    </g>
+  </g>
+
+  <!-- Border Frame Accent -->
+  <rect x="1" y="1" width="1198" height="358" rx="15" fill="none" stroke="url(#neonGrad)" stroke-width="1.2" opacity="0.35"/>
+</svg>

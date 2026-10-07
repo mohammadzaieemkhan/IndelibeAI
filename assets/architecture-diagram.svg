@@ -1,0 +1,207 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 480" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="archBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b0f19" />
+      <stop offset="100%" stop-color="#111827" />
+    </linearGradient>
+
+    <!-- Card Background Gradients -->
+    <linearGradient id="clientCard" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e1b4b" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#312e81" stop-opacity="0.6" />
+    </linearGradient>
+    <linearGradient id="edgeCard" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#022c22" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#064e3b" stop-opacity="0.6" />
+    </linearGradient>
+    <linearGradient id="aiCard" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b0764" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#581c87" stop-opacity="0.6" />
+    </linearGradient>
+    <linearGradient id="dataCard" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#172554" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#1e3a8a" stop-opacity="0.6" />
+    </linearGradient>
+
+    <!-- Flow Neon Line Gradients -->
+    <linearGradient id="lineGrad1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6366f1" />
+      <stop offset="100%" stop-color="#10b981" />
+    </linearGradient>
+    <linearGradient id="lineGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#c084fc" />
+    </linearGradient>
+
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <style>
+    @keyframes flowOffset {
+      0% { stroke-dashoffset: 40; }
+      100% { stroke-dashoffset: 0; }
+    }
+    @keyframes pulseRing {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 0.9; }
+    }
+    .flow-line {
+      stroke-dasharray: 8 6;
+      animation: flowOffset 1.6s linear infinite;
+    }
+    .flow-line-reverse {
+      stroke-dasharray: 8 6;
+      animation: flowOffset 1.6s linear infinite reverse;
+    }
+    .pulsing-border {
+      animation: pulseRing 3s ease-in-out infinite;
+    }
+    .node-title {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      fill: #ffffff;
+    }
+    .node-sub {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 11px;
+      fill: #94a3b8;
+    }
+    .tag {
+      font-family: monospace;
+      font-size: 10px;
+      font-weight: 600;
+    }
+  </style>
+
+  <!-- Background -->
+  <rect width="1000" height="480" rx="14" fill="url(#archBg)" stroke="#1e293b" stroke-width="1.5" />
+
+  <!-- Architecture Header -->
+  <text x="40" y="44" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="16" font-weight="700" fill="#f8fafc">
+    INDELIBLE AI • DISTRIBUTED SYSTEM ARCHITECTURE
+  </text>
+  <text x="40" y="66" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="12" fill="#64748b">
+    Live Data Pipeline: Client Application → Supabase Edge Functions → Multi-Model LLMs &amp; Twilio Integrations
+  </text>
+
+  <!-- Flow Lines (Layer 1 -> Layer 2) -->
+  <line x1="280" y1="160" x2="380" y2="160" stroke="url(#lineGrad1)" stroke-width="2.5" class="flow-line" />
+  <line x1="280" y1="280" x2="380" y2="280" stroke="url(#lineGrad1)" stroke-width="2.5" class="flow-line" />
+  <line x1="280" y1="390" x2="380" y2="390" stroke="url(#lineGrad1)" stroke-width="2.5" class="flow-line" />
+
+  <!-- Flow Lines (Layer 2 -> Layer 3) -->
+  <line x1="620" y1="160" x2="720" y2="160" stroke="url(#lineGrad2)" stroke-width="2.5" class="flow-line" />
+  <line x1="620" y1="280" x2="720" y2="280" stroke="url(#lineGrad2)" stroke-width="2.5" class="flow-line" />
+  <line x1="620" y1="390" x2="720" y2="390" stroke="url(#lineGrad2)" stroke-width="2.5" class="flow-line" />
+
+  <!-- ==================== COLUMN 1: CLIENT FRONTEND ==================== -->
+  <g transform="translate(40, 100)">
+    <!-- Column Title -->
+    <rect x="0" y="0" width="240" height="340" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1.2" />
+    <text x="16" y="28" class="tag" fill="#818cf8">LAYER 1: PRESENTATION &amp; CLIENT</text>
+
+    <!-- Node 1: React 18 & Vite SPA -->
+    <g transform="translate(14, 46)">
+      <rect width="212" height="74" rx="8" fill="url(#clientCard)" stroke="#6366f1" stroke-width="1.2" />
+      <circle cx="24" cy="24" r="6" fill="#38bdf8" />
+      <text x="38" y="28" class="node-title">React 18 &amp; Vite SPA</text>
+      <text x="38" y="46" class="node-sub">Tailwind CSS + Radix UI (shadcn)</text>
+      <text x="38" y="60" class="node-sub">Dark/Light Themes + Sonner</text>
+    </g>
+
+    <!-- Node 2: Exam Studio & Generator -->
+    <g transform="translate(14, 136)">
+      <rect width="212" height="84" rx="8" fill="url(#clientCard)" stroke="#6366f1" stroke-width="1.2" />
+      <circle cx="24" cy="24" r="6" fill="#818cf8" />
+      <text x="38" y="28" class="node-title">Exam Studio &amp; OCR Engine</text>
+      <text x="38" y="46" class="node-sub">Syllabus Uploader &amp; OCR Canvas</text>
+      <text x="38" y="60" class="node-sub">Interactive Test Engine &amp; Timer</text>
+      <text x="38" y="74" class="node-sub">Weighted Rubric Configurator</text>
+    </g>
+
+    <!-- Node 3: Analytics & Recharts -->
+    <g transform="translate(14, 236)">
+      <rect width="212" height="84" rx="8" fill="url(#clientCard)" stroke="#6366f1" stroke-width="1.2" />
+      <circle cx="24" cy="24" r="6" fill="#a78bfa" />
+      <text x="38" y="28" class="node-title">Analytics &amp; State Cache</text>
+      <text x="38" y="46" class="node-sub">Recharts Visual Proficiency</text>
+      <text x="38" y="60" class="node-sub">TanStack Query v5 + Storage</text>
+      <text x="38" y="74" class="node-sub">Google Calendar iCal Sync</text>
+    </g>
+  </g>
+
+  <!-- ==================== COLUMN 2: SUPABASE EDGE FUNCTIONS ==================== -->
+  <g transform="translate(380, 100)">
+    <rect x="0" y="0" width="240" height="340" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1.2" />
+    <text x="16" y="28" class="tag" fill="#34d399">LAYER 2: SUPABASE EDGE GATEWAY</text>
+
+    <!-- Edge Function 1: gemini-ai -->
+    <g transform="translate(14, 46)">
+      <rect width="212" height="74" rx="8" fill="url(#edgeCard)" stroke="#10b981" stroke-width="1.2" />
+      <circle cx="24" cy="24" r="6" fill="#10b981" />
+      <text x="38" y="28" class="node-title">gemini-ai (Edge Function)</text>
+      <text x="38" y="46" class="node-sub">Deno Runtime • Prompt Pipeline</text>
+      <text x="38" y="60" class="node-sub">Question Synthesis &amp; Grading</text>
+    </g>
+
+    <!-- Edge Function 2: openai-ai & extract-text -->
+    <g transform="translate(14, 136)">
+      <rect width="212" height="84" rx="8" fill="url(#edgeCard)" stroke="#10b981" stroke-width="1.2" />
+      <circle cx="24" cy="24" r="6" fill="#059669" />
+      <text x="38" y="28" class="node-title">extract-text &amp; openai-ai</text>
+      <text x="38" y="46" class="node-sub">Handwritten Base64 OCR Parser</text>
+      <text x="38" y="60" class="node-sub">GPT-4o Mixed Order Generator</text>
+      <text x="38" y="74" class="node-sub">Syllabus Topic Vectorizer</text>
+    </g>
+
+    <!-- Edge Function 3: send-whatsapp-notification -->
+    <g transform="translate(14, 236)">
+      <rect width="212" height="84" rx="8" fill="url(#edgeCard)" stroke="#10b981" stroke-width="1.2" />
+      <circle cx="24" cy="24" r="6" fill="#34d399" />
+      <text x="38" y="28" class="node-title">send-whatsapp-notif</text>
+      <text x="38" y="46" class="node-sub">E.164 Phone Sanitization</text>
+      <text x="38" y="60" class="node-sub">Twilio Form-Encoded Dispatcher</text>
+      <text x="38" y="74" class="node-sub">Mock Test Scheduled Alerts</text>
+    </g>
+  </g>
+
+  <!-- ==================== COLUMN 3: AI ENGINES & CLOUD APIS ==================== -->
+  <g transform="translate(720, 100)">
+    <rect x="0" y="0" width="240" height="340" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1.2" />
+    <text x="16" y="28" class="tag" fill="#c084fc">LAYER 3: AI &amp; EXTERNAL APIS</text>
+
+    <!-- AI Service 1: Google Gemini 1.5 Flash -->
+    <g transform="translate(14, 46)">
+      <rect width="212" height="74" rx="8" fill="url(#aiCard)" stroke="#a855f7" stroke-width="1.2" />
+      <circle cx="24" cy="24" r="6" fill="#c084fc" />
+      <text x="38" y="28" class="node-title">Google Gemini 1.5 Flash</text>
+      <text x="38" y="46" class="node-sub">Generative Language API</text>
+      <text x="38" y="60" class="node-sub">Multimodal Vision &amp; OCR</text>
+    </g>
+
+    <!-- AI Service 2: OpenAI GPT-4o-mini -->
+    <g transform="translate(14, 136)">
+      <rect width="212" height="84" rx="8" fill="url(#aiCard)" stroke="#a855f7" stroke-width="1.2" />
+      <circle cx="24" cy="24" r="6" fill="#e879f9" />
+      <text x="38" y="28" class="node-title">OpenAI GPT-4o-mini</text>
+      <text x="38" y="46" class="node-sub">Chat Completions v1</text>
+      <text x="38" y="60" class="node-sub">Zero-Shot Rubric Evaluation</text>
+      <text x="38" y="74" class="node-sub">Structured JSON Output</text>
+    </g>
+
+    <!-- AI Service 3: Twilio & Supabase Cloud -->
+    <g transform="translate(14, 236)">
+      <rect width="212" height="84" rx="8" fill="url(#dataCard)" stroke="#3b82f6" stroke-width="1.2" />
+      <circle cx="24" cy="24" r="6" fill="#60a5fa" />
+      <text x="38" y="28" class="node-title">Twilio API &amp; Supabase DB</text>
+      <text x="38" y="46" class="node-sub">Twilio WhatsApp Messaging API</text>
+      <text x="38" y="60" class="node-sub">PostgreSQL Cloud DB &amp; Auth</text>
+      <text x="38" y="74" class="node-sub">CORS Secured Preflight</text>
+    </g>
+  </g>
+</svg>
