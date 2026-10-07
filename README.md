@@ -535,9 +535,9 @@ Contributions make the open-source community an inspiring place to learn, create
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-Distributed under the **MIT License**. See `LICENSE` for more information.
+
 
 <div align="center">
   <br/>
-  <sub>Built with ❤️ by <a href="https://github.com/mohammadzaieemkhan">Mohammad Zaieem Khan</a> for students and educators worldwide.</sub>
+  <sub>Built with by <a href="https://github.com/mohammadzaieemkhan">Mohammad Zaieem Khan</a> for students and educators worldwide.</sub>
 </div>
